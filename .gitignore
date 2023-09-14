@@ -1,0 +1,9 @@
+/src/debug
+secret_debug.env
+.idea
+venv
+.venv
+__pycache__/
+.DS_Store
+.flake8
+supervisely
