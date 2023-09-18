@@ -11,15 +11,54 @@ else:
 load_dotenv(os.path.expanduser("~/supervisely.env"))
 
 
-def validate_project(path):
-    project_dirs = list(find_project_dirs(path))
-    if len(project_dirs) == 0:
-        try:
-            sly.Project(path, sly.OpenMode.READ)
-        except:
-            raise RuntimeError(
-                ("Project is not valid. " "Select another directory or archive in file selector.")
-            )
+def validate_project(directory):
+    directories = find_project_dirs(directory)
+
+    if len(directories) == 0:
+        raise RuntimeError(f"Directory {directory} does not contain any projects")
+    if len(directories) > 1:
+        raise RuntimeError(f"Directory {directory} contains more than one project")
+
+    directory = directories[0]
+    sly.logger.info(f"Validating project in directory '{directory}'")
+    # Check if meta.json exists in the project directory
+    meta_json_path = os.path.join(directory, "meta.json")
+    if not os.path.exists(meta_json_path):
+        raise RuntimeError(f"meta.json is missing in {directory}")
+
+    # Check for dataset folders in the project directory
+    dataset_folders = [
+        f for f in os.listdir(directory) if os.path.isdir(os.path.join(directory, f))
+    ]
+
+    if len(dataset_folders) == 0:
+        raise RuntimeError("No dataset folders found in the project directory")
+
+    # Iterate through each dataset folder
+    for dataset_folder in dataset_folders:
+        dataset_path = os.path.join(directory, dataset_folder)
+        ann_path = os.path.join(dataset_path, "ann")
+        img_path = os.path.join(dataset_path, "img")
+
+        # Check if ann and img folders exist in the dataset folder
+        if not os.path.exists(img_path):
+            raise RuntimeError(f"Dataset {dataset_folder} is missing 'img' folder")
+        if not os.path.exists(ann_path):
+            raise RuntimeError(f"Dataset {dataset_folder} is missing 'ann' folder")
+
+        # Check for annotation files in the 'ann' folder
+        ann_files = [f for f in os.listdir(ann_path) if f.endswith(".json")]
+        img_files = [f for f in os.listdir(img_path) if not f.endswith(".json")]
+
+        # Check if annotation files have corresponding image files
+        for ann_file in ann_files:
+            img_file = os.path.splitext(ann_file)[0]
+            img_file = f"{img_file}.jpg"
+            if img_file not in img_files:
+                raise RuntimeError(
+                    f"Annotation file {ann_file} does not have a corresponding image file"
+                )
+        sly.logger.info(f"Project in directory '{directory}' is valid. Start import.")
 
 
 class MyImport(sly.app.Import):
@@ -33,6 +72,7 @@ class MyImport(sly.app.Import):
             api=api,
             workspace_id=context.workspace_id,
             name=context.project_name or "my project",
+            progress_cb=context.progress,
         )
 
         # clean local data dir after successful import
@@ -41,5 +81,8 @@ class MyImport(sly.app.Import):
         return project
 
 
-app = MyImport()
+app = MyImport(
+    allowed_project_types=[sly.ProjectType.IMAGES],
+    allowed_destination_options=[sly.app.Import.Destination.NEW_PROJECT],
+)
 app.run()
