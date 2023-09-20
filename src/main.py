@@ -2,6 +2,7 @@ import os
 import supervisely as sly
 from dotenv import load_dotenv
 from supervisely.project.project import find_project_dirs
+from supervisely.io.fs import list_dir_recursively, get_file_name_with_ext
 
 # load ENV variables for debug, has no effect in production
 if sly.is_production():
@@ -12,7 +13,18 @@ load_dotenv(os.path.expanduser("~/supervisely.env"))
 
 
 def validate_project(directory):
-    directories = find_project_dirs(directory)
+    # directories = find_project_dirs(directory)
+    directories = []
+    paths = list_dir_recursively(directory)
+    for path in paths:
+        if get_file_name_with_ext(path) == "meta.json":
+            parent_dir = os.path.dirname(path)
+            project_dir = os.path.join(directory, parent_dir)
+            try:
+                sly.Project(project_dir, sly.OpenMode.READ)
+                directories.append(project_dir)
+            except Exception:
+                pass
 
     if len(directories) == 0:
         raise RuntimeError(f"Directory {directory} does not contain any projects")
@@ -53,7 +65,6 @@ def validate_project(directory):
         # Check if annotation files have corresponding image files
         for ann_file in ann_files:
             img_file = os.path.splitext(ann_file)[0]
-            img_file = f"{img_file}.jpg"
             if img_file not in img_files:
                 raise RuntimeError(
                     f"Annotation file {ann_file} does not have a corresponding image file"
@@ -67,6 +78,7 @@ class MyImport(sly.app.Import):
         api = sly.Api.from_env()
 
         validate_project(context.path)
+        # progress = context.progress(message="Uploading Project")
         project_id, project_name = sly.upload_project(
             dir=context.path,
             api=api,
