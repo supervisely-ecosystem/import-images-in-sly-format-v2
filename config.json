@@ -11,7 +11,7 @@
   "icon_cover": true,
   "context_menu": {
     "context_category": "Import",
-    "target": ["ecosystem", "files_folder", "files_file"]
+    "target": ["ecosystem"]
   },
   "entrypoint": "python -m uvicorn src.main:app --host 0.0.0.0 --port 8000",
   "port": 8000

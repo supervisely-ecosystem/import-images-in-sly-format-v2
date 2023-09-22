@@ -19,7 +19,6 @@ class MyImport(sly.app.Import):
         return Markdown(utils.HELPER_MD)
 
     def process(self, context: sly.app.Import.Context):
-        # create api object to communicate with Supervisely Server
         api = sly.Api.from_env()
 
         project = utils.validate(context.path)
