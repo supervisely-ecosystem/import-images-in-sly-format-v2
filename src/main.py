@@ -1,7 +1,9 @@
-from os.path import join, expanduser
+from os.path import expanduser, join
+
 import supervisely as sly
 from dotenv import load_dotenv
-from supervisely.app.widgets import Widget, Markdown
+from supervisely.app.widgets import Markdown
+
 import src.utils as utils
 
 # load ENV variables for debug, has no effect in production
@@ -13,7 +15,7 @@ load_dotenv(expanduser("~/supervisely.env"))
 
 
 class MyImport(sly.app.Import):
-    def show_format_structure(self) -> Widget or str:
+    def show_format_structure(self):
         return Markdown(utils.HELPER_MD)
 
     def process(self, context: sly.app.Import.Context):
