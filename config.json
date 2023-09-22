@@ -1,18 +1,18 @@
 {
   "name": "Import images in Supervisely format v2",
   "type": "app",
+  "version": "2.0.0",
   "categories": ["import", "images"],
   "description": "Images with corresponding annotations",
   "docker_image": "supervisely/import-export:6.72.128",
-  "main_script": "src/main.py",
   "task_location": "workspace_tasks",
   "icon": "",
   "poster": "",
   "icon_cover": true,
-  "headless": true,
-  "min_agent_version": "6.7.4",
   "context_menu": {
     "context_category": "Import",
-    "target": ["files_folder", "files_file"]
-  }
+    "target": ["ecosystem", "files_folder", "files_file"]
+  },
+  "entrypoint": "python -m uvicorn src.main:app --host 0.0.0.0 --port 8000",
+  "port": 8000
 }
