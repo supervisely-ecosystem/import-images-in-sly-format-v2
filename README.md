@@ -10,7 +10,7 @@
   <a href="#Demo">Demo</a>
 </p>
 
-[![](https://img.shields.io/badge/supervisely-ecosystem-brightgreen)](../../../../supervisely-ecosystem/import-images-in-sly-format)
+[![](https://img.shields.io/badge/supervisely-ecosystem-brightgreen)](https://ecosystem.supervise.ly/apps/supervisely-ecosystem/import-images-in-sly-format)
 [![](https://img.shields.io/badge/slack-chat-green.svg?logo=slack)](https://supervise.ly/slack)
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/supervisely-ecosystem/import-images-in-sly-format)
 [![views](https://app.supervise.ly/img/badges/views/supervisely-ecosystem/import-images-in-sly-format.png)](https://supervise.ly)
@@ -68,7 +68,7 @@ As a result, we will get project `cats_vs_dogs_project` with 2 datasets named: `
 
 # How to Run
 
-**Step 1.** Add [Import images in Supervisely format](../../../../supervisely-ecosystem/import-images-in-sly-format) app to your team from Ecosystem
+**Step 1.** Add [Import images in Supervisely format](https://ecosystem.supervise.ly/apps/supervisely-ecosystem/import-images-in-sly-format) app to your team from Ecosystem
 
 <img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/import-images-in-sly-format" src="https://i.imgur.com/Y6RcQPT.png" width="350px" style='padding-bottom: 10px'/>
 
