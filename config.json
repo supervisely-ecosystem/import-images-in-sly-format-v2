@@ -1,6 +1,7 @@
 {
   "name": "Import images in Supervisely format v2",
   "type": "app",
+  "instance_version": "6.15.60",
   "version": "2.0.0",
   "categories": ["import", "images"],
   "description": "Images with corresponding annotations",
