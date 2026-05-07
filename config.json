@@ -3,16 +3,21 @@
   "type": "app",
   "instance_version": "6.15.60",
   "version": "2.0.0",
-  "categories": ["import", "images"],
+  "categories": [
+    "import",
+    "images"
+  ],
   "description": "Images with corresponding annotations",
-  "docker_image": "supervisely/import-export:6.73.564",
+  "docker_image": "supervisely/base-py-sdk-hardened:6.73.564",
   "task_location": "workspace_tasks",
   "icon": "",
   "poster": "",
   "icon_cover": true,
   "context_menu": {
     "context_category": "Import",
-    "target": ["ecosystem"]
+    "target": [
+      "ecosystem"
+    ]
   },
   "entrypoint": "python -m uvicorn src.main:app --host 0.0.0.0 --port 8000",
   "port": 8000
